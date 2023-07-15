@@ -1,11 +1,17 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file
+dotenv.config();
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD83-Q3-x9kGDvQY5npNUz5F-oB6Xb8jqs",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "to-do-app-db405.firebaseapp.com",
   projectId: "to-do-app-db405",
   storageBucket: "to-do-app-db405.appspot.com",
@@ -15,3 +21,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+export const db = getFirestore(app)
