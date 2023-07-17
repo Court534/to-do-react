@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import Todo from './components/Todo'
 import { db } from './firebase'
-import { collection, query, onSnapshot, updateDoc, doc } from 'firebase/firestore'
+import { collection, query, onSnapshot, updateDoc, doc, addDoc } from 'firebase/firestore'
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#2f80ed] to-[#1cb5e0]`,
@@ -22,7 +22,15 @@ function App() {
   // Create todo
   const createTodo = async (event) => {
     event.preventDefault(event)
-  
+    if (input === '') {
+      alert('Please enter a valid input')
+      return
+    }
+    await addDoc(collection(db, 'todos'), {
+      text: input,
+      completed: false,
+    })
+    setInput('')
   }
 
   // read todo from firebase
@@ -53,7 +61,7 @@ function App() {
           To Do App
         </h3>
         <form onSubmit={createTodo} className={style.form}>
-          <input value={input} onChange={(event) => setInput(event.target.value)} className={style.input} type="text" placeholder="What do you need to do?" />
+          <input value={input} onChange={(event) => setInput(event.target.value)} className={style.input} type="text" placeholder="What would you like to add?" />
           <button className={style.button}><AiOutlinePlus size={30} /></button>
         </form>
         <ul>
@@ -61,7 +69,7 @@ function App() {
           <Todo key={index} todo={todo} toggleComplete={toggleComplete} />
           ))}
         </ul>
-        <p className={style.count}>You have 2 items on your list</p>
+        {todos.length === 0 ? null : <p className={style.count}>You have {todos.length} items on your list</p>}
       </div>
     </div>
   )
