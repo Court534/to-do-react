@@ -31,3 +31,5 @@ Please click [here](https://cs-to-do-app.netlify.app/) to view the app live
 git clone https://github.com/username/vite-react-todo-app.git
 cd vite-react-todo-app
 npm run dev
+
+Author [@Court534](https://github.com/Court534/)
