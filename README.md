@@ -26,10 +26,16 @@ Please click [here](https://cs-to-do-app.netlify.app/) to view the app live
 ### Installation locally
 
 1. Clone the repo
-
 ```bash
 git clone https://github.com/username/vite-react-todo-app.git
+```
+2. Change directory into the project
+```bash
 cd vite-react-todo-app
+```
+3. Run the server
+```bash
 npm run dev
+```
 
 Author [@Court534](https://github.com/Court534/)
