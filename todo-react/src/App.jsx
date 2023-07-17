@@ -75,7 +75,7 @@ function App() {
             onChange={(event) => setInput(event.target.value)}
             className={style.input}
             type="text"
-            placeholder="What would you like to add?"
+            placeholder="Add new item"
           />
           <button className={style.button}>
             <AiOutlinePlus size={30} />
