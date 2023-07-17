@@ -9,7 +9,7 @@ const style = {
   button: `cursor-pointer flex items-center`
 }
 
-const Todo = ({todo, toggleComplete}) => {
+const Todo = ({todo, toggleComplete, deleteTodo}) => {
   return (
     <li className={todo.completed ? style.liComplete : style.li}>
       <div className={style.row}>
@@ -18,7 +18,7 @@ const Todo = ({todo, toggleComplete}) => {
           {todo.text}
         </p>
       </div>
-      <button>{<FaRegTrashAlt />}</button>
+      <button onClick={() => deleteTodo(todo.id)}>{<FaRegTrashAlt />}</button>
     </li>
   )
 }

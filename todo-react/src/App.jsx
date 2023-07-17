@@ -1,8 +1,16 @@
-import { useState, useEffect } from 'react'
-import { AiOutlinePlus } from 'react-icons/ai'
-import Todo from './components/Todo'
-import { db } from './firebase'
-import { collection, query, onSnapshot, updateDoc, doc, addDoc } from 'firebase/firestore'
+import { useState, useEffect } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import Todo from "./components/Todo";
+import { db } from "./firebase";
+import {
+  collection,
+  query,
+  onSnapshot,
+  updateDoc,
+  doc,
+  addDoc,
+  deleteDoc
+} from "firebase/firestore";
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#2f80ed] to-[#1cb5e0]`,
@@ -11,68 +19,81 @@ const style = {
   form: `flex justify-between`,
   input: `border p-2 w-full text-xl`,
   button: `border p-4 ml-2 bg-purple-500 text-slate-100`,
-  count: `text-center p-2`
-}
+  count: `text-center p-2`,
+};
 
 function App() {
-  const [todos, setTodos] = useState([])
-  const [input, setInput] = useState('')
-  
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState("");
 
   // Create todo
   const createTodo = async (event) => {
-    event.preventDefault(event)
-    if (input === '') {
-      alert('Please enter a valid input')
-      return
+    event.preventDefault(event);
+    if (input === "") {
+      alert("Please enter a valid input");
+      return;
     }
-    await addDoc(collection(db, 'todos'), {
+    await addDoc(collection(db, "todos"), {
       text: input,
       completed: false,
-    })
-    setInput('')
-  }
+    });
+    setInput("");
+  };
 
   // read todo from firebase
   useEffect(() => {
-    const q = query(collection(db, 'todos'))
+    const q = query(collection(db, "todos"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      let todosArr = []
+      let todosArr = [];
       querySnapshot.forEach((doc) => {
-        todosArr.push({...doc.data(), id: doc.id})
-      })
-      setTodos(todosArr)
-    })
-    return () => unsubscribe
-  }, [])
-  
+        todosArr.push({ ...doc.data(), id: doc.id });
+      });
+      setTodos(todosArr);
+    });
+    return () => unsubscribe;
+  }, []);
+
   // Update todo
   const toggleComplete = async (todo) => {
-    await updateDoc(doc(db, 'todos', todo.id), {
-      completed: !todo.completed
-    })
-  }
+    await updateDoc(doc(db, "todos", todo.id), {
+      completed: !todo.completed,
+    });
+  };
+
   // Delete todo from firebase
+  const deleteTodo = async (id) => {
+    await deleteDoc(doc(db, 'todos', id))
+  }
 
   return (
     <div className={style.bg}>
       <div className={style.container}>
-        <h3 className={style.heading}>
-          To Do App
-        </h3>
+        <h3 className={style.heading}>To Do App</h3>
         <form onSubmit={createTodo} className={style.form}>
-          <input value={input} onChange={(event) => setInput(event.target.value)} className={style.input} type="text" placeholder="What would you like to add?" />
-          <button className={style.button}><AiOutlinePlus size={30} /></button>
+          <input
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            className={style.input}
+            type="text"
+            placeholder="What would you like to add?"
+          />
+          <button className={style.button}>
+            <AiOutlinePlus size={30} />
+          </button>
         </form>
         <ul>
           {todos.map((todo, index) => (
-          <Todo key={index} todo={todo} toggleComplete={toggleComplete} />
+            <Todo key={index} todo={todo} toggleComplete={toggleComplete} deleteTodo={deleteTodo}/>
           ))}
         </ul>
-        {todos.length === 0 ? null : <p className={style.count}>You have {todos.length} items on your list</p>}
+        {todos.length === 0 ? null : (
+          <p className={style.count}>
+            You have {todos.length} items on your list
+          </p>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
